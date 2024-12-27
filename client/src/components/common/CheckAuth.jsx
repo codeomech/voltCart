@@ -1,41 +1,24 @@
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 function CheckAuth({ isAuthenticated, user, children }) {
   const location = useLocation();
 
-  if (location.pathname === "/") {
-    if (user?.role === "admin") {
-      return <Navigate to="/admin/dashboard" />;
-    } else {
-      return <Navigate to="/" />;
-    }
+  // Case 1: Admin user on the root path should be redirected to /admin/dashboard
+  if (isAuthenticated && user?.role === "admin" && location.pathname === "/") {
+    return <Navigate to="/admin/dashboard" />;
   }
 
+  // Case 2: Non-admin user tries to access admin routes, redirect them to /
   if (
-    !isAuthenticated &&
-    !(
-      location.pathname.includes("/login") ||
-      location.pathname.includes("/register")
-    )
+    location.pathname.startsWith("/admin") &&
+    (!isAuthenticated || user?.role !== "admin")
   ) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
 
-  if (
-    isAuthenticated &&
-    (location.pathname.includes("/login") ||
-      location.pathname.includes("/register"))
-  ) {
-    if (user?.role === "admin") {
-      return <Navigate to="/admin/dashboard" />;
-    } else {
-      return <Navigate to="/" />;
-    }
-  }
-
-  return children; // Ensure a return when no conditions match
+  // Case 3: Allow other paths or authenticated normal user access
+  return children;
 }
 
 export default CheckAuth;

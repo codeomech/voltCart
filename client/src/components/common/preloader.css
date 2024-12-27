@@ -25,3 +25,12 @@
   overflow: hidden;
   color: #fff;
 }
+
+@media (max-width: 768px) {
+  .preloader .texts-container {
+    flex-direction: row; /* Stack elements vertically */
+    justify-content: center; /* Center vertically */
+    font-size: 16px;
+    gap: 15px; /* Add spacing between items */
+  }
+}

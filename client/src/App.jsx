@@ -1,8 +1,6 @@
 import Navbar from "./components/common/Navbar";
-import Register from "./pages/auth/Register";
 import { Routes, Route } from "react-router-dom";
 import Footer from "./components/common/Footer";
-import Login from "./pages/auth/Login";
 import Dashboard from "./pages/shop/Dashboard";
 import AdminLayout from "./components/admin/Layout";
 import Product from "./pages/admin-view/Product";
@@ -18,6 +16,15 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { checkAuth } from "./store/auth-slice";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
+import Shop from "./pages/shop/Shop";
+import Contact from "./pages/shop/Contact";
+import About from "./pages/shop/About";
+import ShoppingAccount from "./pages/shop/Account";
+import ShoppingCheckout from "./pages/shop/Checkout";
+import ProductDetailPage from "./pages/shop/Product";
+import PaymentSuccessPage from "./pages/shop/Payment";
+import ModalProvider from "./context/DialogContext";
+import Banner from "./components/common/Banner";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -29,60 +36,53 @@ function App() {
     dispatch(checkAuth());
   }, [dispatch]);
 
-  console.log(isLoading, user);
-
-  const GoogleAuthWrapper = () => {
-    return (
-      <GoogleOAuthProvider clientId="252794840759-al2c1t9s85j0i8dg9nfbua5n4v31ikfl.apps.googleusercontent.com">
-        <Login />
-      </GoogleOAuthProvider>
-    );
-  };
+  console.log(isLoading, isAuthenticated, user);
 
   return (
-    <>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <div className="flex flex-col overflow-hidden bg-white">
         <Preloader />
-        <div className="big-image">
-          <Navbar />
-        </div>
-        <Toaster />
-        <Routes>
-          <Route
-            path="/register"
-            element={
-              <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-                <Register />
-              </CheckAuth>
-            }
-          ></Route>
-          <Route
-            path="/login"
-            element={
-              <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-                <GoogleAuthWrapper />
-              </CheckAuth>
-            }
-          ></Route>
-          <Route path="/" element={<Dashboard />}></Route>
-          <Route
-            path="/admin"
-            element={
-              <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-                <AdminLayout />
-              </CheckAuth>
-            }
-          >
-            <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="products" element={<Product />} />
-            <Route path="orders" element={<Orders />} />
-            <Route path="features" element={<Features />} />
-          </Route>
-          <Route path="*" element={<Error />}></Route>
-        </Routes>
-        <Footer />
+        <ModalProvider>
+          <div className="big-image">
+            <Banner />
+            {user?.role !== "admin" ? <Navbar /> : <></>}
+          </div>
+          <Toaster />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+                  <Dashboard />
+                </CheckAuth>
+              }
+            ></Route>
+            <Route path="shop" element={<Shop />} />
+            <Route path="contactUs" element={<Contact />} />
+            <Route path="story" element={<About />} />
+            <Route path="account" element={<ShoppingAccount />} />
+            <Route path="checkout" element={<ShoppingCheckout />} />
+            <Route path="/product/:id" element={<ProductDetailPage />} />
+            <Route path="payment-success" element={<PaymentSuccessPage />} />
+            <Route
+              path="/admin"
+              element={
+                <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+                  <AdminLayout />
+                </CheckAuth>
+              }
+            >
+              <Route path="dashboard" element={<AdminDashboard />} />
+              <Route path="products" element={<Product />} />
+              <Route path="orders" element={<Orders />} />
+              <Route path="features" element={<Features />} />
+            </Route>
+            <Route path="*" element={<Error />}></Route>
+          </Routes>
+          <Footer />
+        </ModalProvider>
       </div>
-    </>
+    </GoogleOAuthProvider>
   );
 }
 

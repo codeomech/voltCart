@@ -5,7 +5,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        gaegu: ["Gaegu", "cursive"],
+        great: ["Great Vibes", "cursive"],
+        gaegu: ["Gaegu", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -65,5 +66,8 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@tailwindcss/aspect-ratio"),
+  ],
 };

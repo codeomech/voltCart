@@ -1,7 +1,11 @@
-import React from "react";
+import AdminOrdersView from "@/components/admin/order";
 
-const Orders = () => {
-  return <div>Orders</div>;
-};
+function AdminOrders() {
+  return (
+    <div>
+      <AdminOrdersView />
+    </div>
+  );
+}
 
-export default Orders;
+export default AdminOrders;

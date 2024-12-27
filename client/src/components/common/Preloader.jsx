@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import CartIcon from "@/assets/Cart";
 import { preLoaderAnim } from "../../animation";
 import "./preloader.css";
 const Preloader = () => {
@@ -7,7 +8,7 @@ const Preloader = () => {
   }, []);
   return (
     <div className="preloader">
-      <div className="texts-container">
+      <div className="texts-container font-gaegu">
         <span>ABSORBABLE</span>
         <span>BREATHABLE</span>
         <span>SQUEEZABLE</span>

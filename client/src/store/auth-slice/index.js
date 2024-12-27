@@ -12,7 +12,7 @@ export const registerUser = createAsyncThunk(
 
   async (formData) => {
     const response = await axios.post(
-      "http://localhost:5000/api/auth/register",
+      `${import.meta.env.VITE_API_URL}/api/auth/register`,
       formData,
       {
         withCredentials: true,
@@ -27,7 +27,7 @@ export const verifyOtp = createAsyncThunk(
   "/auth/verify-otp",
   async ({ email, otp }) => {
     const response = await axios.post(
-      "http://localhost:5000/api/auth/verify-otp",
+      `${import.meta.env.VITE_API_URL}/api/auth/verify-otp`,
       { email, otp }, // Make sure to pass email and otp here
       { withCredentials: true }
     );
@@ -37,17 +37,19 @@ export const verifyOtp = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
   "/auth/login",
-
-  async (formData) => {
-    const response = await axios.post(
-      "http://localhost:5000/api/auth/login",
-      formData,
-      {
-        withCredentials: true,
-      }
-    );
-
-    return response.data;
+  async (formData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/auth/login`,
+        formData,
+        { withCredentials: true }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Something went wrong"
+      );
+    }
   }
 );
 
@@ -56,7 +58,7 @@ export const googleLoginUser = createAsyncThunk(
   async (code, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/google-login",
+        `${import.meta.env.VITE_API_URL}/api/auth/google-login`,
         { code },
         {
           withCredentials: true, // Make sure this is set in the backend as well
@@ -75,7 +77,7 @@ export const logoutUser = createAsyncThunk(
 
   async () => {
     const response = await axios.post(
-      "http://localhost:5000/api/auth/logout",
+      `${import.meta.env.VITE_API_URL}/api/auth/logout`,
       {},
       {
         withCredentials: true,
@@ -91,7 +93,7 @@ export const checkAuth = createAsyncThunk(
 
   async () => {
     const response = await axios.get(
-      "http://localhost:5000/api/auth/check-auth",
+      `${import.meta.env.VITE_API_URL}/api/auth/check-auth`,
       {
         withCredentials: true,
         headers: {

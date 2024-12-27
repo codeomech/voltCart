@@ -1,169 +1,165 @@
-import React, { useState } from "react";
-import CartIcon from "../../assets/Cart";
+import {
+  HousePlug,
+  LogOut,
+  Menu,
+  ShoppingCart,
+  UserCog,
+  User,
+} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import UserIcon from "../../assets/UserIcon";
-import LogOutIcon from "@/assets/Logout";
-import { useSelector, useDispatch } from "react-redux";
-import { useToast } from "@/hooks/use-toast";
+import logo from "../../assets/feather.png";
+import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import { Button } from "../ui/button";
+import { useDispatch, useSelector } from "react-redux";
+import { shoppingViewHeaderMenuItems } from "@/config";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 import { logoutUser } from "@/store/auth-slice";
+import UserCartWrapper from "../shopping-view/cart-wrapper";
+import { useEffect, useState } from "react";
+import { fetchCartItems } from "@/store/shop/cart-slice";
+import { Label } from "../ui/label";
+import { useModalContext } from "@/context/DialogContext";
+import { MODAL_TYPES } from "@/context/DialogContext";
 
-const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isCartOpen, setIsCartOpen] = useState(false);
+function MenuItems() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { toast } = useToast();
-  const { isAuthenticated } = useSelector((state) => state.auth);
 
-  console.log(isAuthenticated);
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const handleLogout = () => {
-    dispatch(logoutUser()).then((response) => {
-      if (response.payload.success) {
-        console.log("User logged out");
-        toast({
-          title: "Logged Out successfully",
-          description: response.payload.message,
-        });
-      }
-    });
-  };
-
-  const toggleCart = () => {
-    setIsCartOpen(!isCartOpen);
-  };
-
-  const toggleLogin = () => {
-    navigate("/login");
-  };
+  function handleNavigate(getCurrentMenuItem) {
+    navigate(getCurrentMenuItem.path);
+  }
 
   return (
-    <nav className="shadow-lg">
-      <div className="max-w-full mx-auto px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Sidebar Button */}
-          <div className="md:hidden">
-            <button
-              onClick={toggleMenu}
-              className="text-gray-800 focus:outline-none"
-            >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16m-7 6h7"}
-                ></path>
-              </svg>
-            </button>
-          </div>
-
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <Link to="/">
-              <h1 className="text-2xl font-bold text-[#4a3116]">Hankey</h1>
-            </Link>
-          </div>
-
-          {/* Desktop Menu */}
-          <div className="hidden md:flex space-x-6 gap-x-32">
-            <div className="hidden md:flex space-x-6 gap-x-32">
-              <Link
-                to="/shop"
-                className="text-black font-gaegu text-2xl hover:text-white hover:underline transition duration-300"
-              >
-                Shop
-              </Link>
-              <Link
-                to="/contact"
-                className="text-black font-gaegu text-2xl hover:text-white hover:underline transition duration-300"
-              >
-                Contact Us
-              </Link>
-              <Link
-                to="/blog"
-                className="text-black font-gaegu text-2xl hover:text-white hover:underline transition duration-300"
-              >
-                Blog
-              </Link>
-            </div>
-          </div>
-
-          <div className="flex items-center space-x-4">
-            {isAuthenticated ? (
-              <button
-                className="text-black hover:text-white"
-                onClick={handleLogout}
-              >
-                <LogOutIcon />
-              </button>
-            ) : (
-              <button
-                className="text-black hover:text-white"
-                onClick={toggleLogin}
-              >
-                <UserIcon />
-              </button>
-            )}
-            <button
-              className="text-black hover:text-white"
-              onClick={toggleCart}
-            >
-              <CartIcon />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Sidebar */}
-      {isOpen && (
-        <div className="md:hidden bg-white">
-          <a
-            href="#shop"
-            className="block text-gray-800 font-gaegu text-2xl py-2 px-4 hover:bg-gray-100"
-          >
-            Shop
-          </a>
-          <a
-            href="#contact"
-            className="block text-gray-800 font-gaegu text-2xl py-2 px-4 hover:bg-gray-100"
-          >
-            Contact Us
-          </a>
-          <a
-            href="#blog"
-            className="block text-gray-800 font-gaegu text-2xl py-2 px-4 hover:bg-gray-100"
-          >
-            Blog
-          </a>
-        </div>
-      )}
-
-      {/* Right Sidebar (Cart) */}
-      {isCartOpen && (
-        <div className="fixed top-0 right-0 w-80 h-full bg-white shadow-lg z-50 p-4">
-          <h2 className="text-lg font-bold mb-4">Your Cart</h2>
-          {/* Cart Content */}
-          <button
-            onClick={toggleCart}
-            className="absolute top-4 right-4 text-gray-800 focus:outline-none"
-          >
-            Close
-          </button>
-          {}
-        </div>
-      )}
+    <nav className="flex flex-col mb-3 gap-3 lg:mb-0 lg:items-center lg:gap-12 lg:flex-row">
+      {shoppingViewHeaderMenuItems.map((menuItem) => (
+        <Label
+          onClick={() => handleNavigate(menuItem)}
+          className="text-2xl cursor-pointer font-gaegu"
+          key={menuItem.id}
+        >
+          {menuItem.label}
+        </Label>
+      ))}
     </nav>
   );
-};
+}
 
-export default Navbar;
+function HeaderRightContent() {
+  const { user } = useSelector((state) => state.auth);
+  console.log(user);
+  const { cartItems } = useSelector((state) => state.shopCart);
+  const [openCartSheet, setOpenCartSheet] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  // const { openDialog } = useDialog();
+  const { openModal } = useModalContext();
+
+  function handleLogout() {
+    dispatch(logoutUser());
+  }
+
+  useEffect(() => {
+    dispatch(fetchCartItems(user?.id));
+  }, [dispatch]);
+
+  console.log(cartItems, "sangam");
+
+  return (
+    <div className="flex lg:items-center lg:flex-row flex-col gap-4">
+      <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
+        <Button
+          onClick={() => setOpenCartSheet(true)}
+          variant="outline"
+          size="icon"
+          className="relative"
+        >
+          <ShoppingCart className="w-6 h-6" />
+          <span className="absolute top-[-5px] right-[2px] font-bold text-sm">
+            {cartItems?.items?.length || 0}
+          </span>
+          <span className="sr-only">User cart</span>
+        </Button>
+        <UserCartWrapper
+          setOpenCartSheet={setOpenCartSheet}
+          cartItems={
+            cartItems && cartItems.items && cartItems.items.length > 0
+              ? cartItems.items
+              : []
+          }
+        />
+      </Sheet>
+      {/* User Menu or Login */}
+      {user ? (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Avatar className="bg-black">
+              <AvatarFallback className="bg-black text-white font-extrabold">
+                {user?.userName[0].toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent side="right" className="w-56">
+            <DropdownMenuLabel>Logged in as {user?.userName}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => navigate("/account")}>
+              <UserCog className="mr-2 h-4 w-4" />
+              Account
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleLogout}>
+              <LogOut className="mr-2 h-4 w-4" />
+              Logout
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ) : (
+        <Button onClick={() => openModal(MODAL_TYPES.LOGIN_MODAL)}>
+          Login
+        </Button>
+      )}
+    </div>
+  );
+}
+
+function ShoppingHeader() {
+  const { isAuthenticated } = useSelector((state) => state.auth);
+
+  return (
+    <header className="sticky top-0 z-40 w-full border-b bg-background">
+      <div className="flex h-16 items-center justify-between px-4 md:px-6">
+        <Link to="/" className="flex items-center gap-2">
+          <img className="w-11 h-11" src={logo}></img>
+          <span className="font-bold text-4xl font-great">Volt</span>
+        </Link>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="outline" size="icon" className="lg:hidden">
+              <Menu className="h-6 w-6" />
+              <span className="sr-only">Toggle header menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-full max-w-xs">
+            <MenuItems />
+            <HeaderRightContent />
+          </SheetContent>
+        </Sheet>
+        <div className="hidden lg:block">
+          <MenuItems />
+        </div>
+
+        <div className="hidden lg:block">
+          <HeaderRightContent />
+        </div>
+      </div>
+    </header>
+  );
+}
+
+export default ShoppingHeader;
