@@ -30,7 +30,7 @@ import { useToast } from "@/hooks/use-toast";
 
 const Dashboard = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const slides = [bannerOne, bannerTwo, bannerFour];
+  const slides = [bannerFour];
   const { productList, productDetails } = useSelector(
     (state) => state.shopProducts
   );

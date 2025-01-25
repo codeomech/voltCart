@@ -54,18 +54,27 @@ function ProductImageUpload({
       console.log(pair[0] + ", " + pair[1]);
     }
 
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/admin/products/upload-image`,
-      data,
-      { timeout: 10000 }
-    );
-    console.log(response, "response");
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/admin/products/upload-image`,
+        data,
+        { timeout: 30000 }
+      );
+      console.log("Upload Response:", response);
 
-    if (response?.data?.success) {
-      setUploadedImageUrl(response.data.result.url);
-      setImageLoadingState(false);
+      if (response?.data?.success) {
+        setUploadedImageUrl(response.data.result.url);
+        setImageLoadingState(false);
+      }
+    } catch (error) {
+      if (error.code === "ECONNABORTED") {
+        console.error("Upload timeout. Try again later.");
+        setImageLoadingState(false);
+      } else {
+        console.error("Upload failed:", error);
+        setImageLoadingState(false);
+      }
     }
-    setImageLoadingState(false);
   }
 
   useEffect(() => {

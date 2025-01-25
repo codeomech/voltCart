@@ -19,12 +19,13 @@ import { useEffect } from "react";
 import Shop from "./pages/shop/Shop";
 import Contact from "./pages/shop/Contact";
 import About from "./pages/shop/About";
+import ShippingPolicy from "./pages/shop/Shipping";
+import PrivacyPolicy from "./pages/shop/Privacy";
 import ShoppingAccount from "./pages/shop/Account";
 import ShoppingCheckout from "./pages/shop/Checkout";
 import ProductDetailPage from "./pages/shop/Product";
 import PaymentSuccessPage from "./pages/shop/Payment";
 import ModalProvider from "./context/DialogContext";
-import Banner from "./components/common/Banner";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -44,7 +45,6 @@ function App() {
         <Preloader />
         <ModalProvider>
           <div className="big-image">
-            <Banner />
             {user?.role !== "admin" ? <Navbar /> : <></>}
           </div>
           <Toaster />
@@ -60,6 +60,8 @@ function App() {
             <Route path="shop" element={<Shop />} />
             <Route path="contactUs" element={<Contact />} />
             <Route path="story" element={<About />} />
+            <Route path="shipping-policy" element={<ShippingPolicy />} />
+            <Route path="privacy-policy" element={<PrivacyPolicy />} />
             <Route path="account" element={<ShoppingAccount />} />
             <Route path="checkout" element={<ShoppingCheckout />} />
             <Route path="/product/:id" element={<ProductDetailPage />} />

@@ -1,6 +1,7 @@
 const cloudinary = require("cloudinary").v2;
 const multer = require("multer");
 const streamifier = require("streamifier");
+require("dotenv").config();
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -28,7 +29,7 @@ async function imageUploadUtil(fileBuffer, fileName) {
         // Pipe the buffer into the upload stream
         streamifier.createReadStream(fileBuffer).pipe(uploadStream);
       });
-
+      console.log("result", result);
       return result;
     } catch (error) {
       console.error("Cloudinary Upload Error Details: ", error);
