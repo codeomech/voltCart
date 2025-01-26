@@ -18,8 +18,6 @@ function ShoppingCheckout() {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  console.log(currentSelectedAddress, "cartItems");
-
   const totalCartAmount =
     cartItems && cartItems.items && cartItems.items.length > 0
       ? cartItems.items.reduce(
@@ -93,7 +91,6 @@ function ShoppingCheckout() {
           order_id: razorpayOrderId,
           handler: function (response) {
             // Dispatch capturePayment on success
-            console.log("Razorpay Response:", response); // Log response here
             dispatch(
               capturePayment({
                 paymentId: response.razorpay_payment_id,
@@ -101,7 +98,6 @@ function ShoppingCheckout() {
                 razorpaySignature: response.razorpay_signature,
               })
             ).then((paymentResponse) => {
-              console.log(paymentResponse);
               if (paymentResponse?.payload?.success) {
                 toast({
                   title: "Payment Successful!",

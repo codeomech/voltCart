@@ -24,17 +24,6 @@ export const preLoaderAnim = () => {
       stagger: 0.2,
       ease: "Power3.easeOut",
     })
-
-    .to(".landing", {
-      duration: 0.05,
-      css: { overflowY: "hidden", height: "unset" },
-    })
-    .from(".landing__top .sub", {
-      duration: 1,
-      opacity: 0,
-      y: 80,
-      ease: "expo.easeOut",
-    })
     .to(
       ".preloader",
       {
@@ -45,40 +34,6 @@ export const preLoaderAnim = () => {
       },
       "-=2"
     )
-    .from(".landing__main .text", {
-      duration: 2,
-      // scale: 0,
-      y: 10,
-      opacity: 0,
-      stagger: {
-        amount: 2,
-      },
-      ease: "power3.easeInOut",
-    })
-    .from(".links .item", {
-      duration: 0.5,
-      opacity: 0,
-      delay: window.innerWidth < 763 ? -3 : -0.6,
-      // y: 80,
-      stagger: {
-        amount: 0.5,
-      },
-      ease: "expo.easeOut",
-      onComplete: animateMainShape(),
-    })
-    .from(".main-circle", {
-      duration: 1,
-      opacity: 0,
-      ease: "power3.easeInOut",
-      onComplete: animateShapes(),
-    })
-    .from(".shapes .shape", {
-      duration: 1,
-      opacity: 0,
-      delay: -1,
-      ease: "power3.easeInOut",
-      stagger: 1,
-    })
     .to(".preloader", {
       duration: 0,
       css: { display: "none" },
@@ -92,31 +47,6 @@ export const mobileLanding = () => {
       delay: 0,
       opacity: 0,
       y: 80,
-      ease: "expo.easeOut",
-    });
-};
-
-const animateMainShape = () => {
-  const infiniteTl = gsap.timeline({
-    repeat: -1,
-  });
-  infiniteTl
-    .to(".shapes .main-circle", {
-      duration: 6,
-      x: -30,
-      y: -50,
-      ease: "expo.easeOut",
-    })
-    .to(".shapes .main-circle", {
-      duration: 6,
-      x: -30,
-      y: 50,
-      ease: "expo.easeOut",
-    })
-    .to(".shapes .main-circle", {
-      duration: 4,
-      x: 0,
-      y: 0,
       ease: "expo.easeOut",
     });
 };

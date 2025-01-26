@@ -18,12 +18,8 @@ function ProductImageUpload({
 }) {
   const inputRef = useRef(null);
 
-  console.log(isEditMode, "isEditMode");
-
   function handleImageFileChange(event) {
-    console.log(event.target.files, "event.target.files");
     const selectedFile = event.target.files?.[0];
-    console.log(selectedFile);
 
     if (selectedFile) setImageFile(selectedFile);
   }
@@ -50,17 +46,12 @@ function ProductImageUpload({
     const data = new FormData();
     data.append("my_file", imageFile);
 
-    for (let pair of data.entries()) {
-      console.log(pair[0] + ", " + pair[1]);
-    }
-
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/admin/products/upload-image`,
         data,
         { timeout: 30000 }
       );
-      console.log("Upload Response:", response);
 
       if (response?.data?.success) {
         setUploadedImageUrl(response.data.result.url);

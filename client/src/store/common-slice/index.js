@@ -17,7 +17,6 @@ export const fetchDiscount = createAsyncThunk(
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/common/discount/get`
       );
-      console.log(response.data);
       return response.data; // Assuming response.data is an array of discount strings
     } catch (error) {
       return rejectWithValue(error.response.data);

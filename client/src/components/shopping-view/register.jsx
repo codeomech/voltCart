@@ -68,7 +68,6 @@ const RegisterDialog = ({ openModal, closeModal }) => {
   };
 
   const handleVerifyOtp = async () => {
-    console.log(otp);
     const otpData = { email, otp };
     dispatch(verifyOtp(otpData))
       .then((response) => {

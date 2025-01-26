@@ -45,7 +45,6 @@ const LoginDialog = ({ openModal, closeModal }) => {
     try {
       const result = await dispatch(googleLoginUser(authResult["code"]));
       if (result.payload) {
-        console.log(result.payload);
         closeModal();
         navigate("/");
         toast({ title: "Login Successful!", description: "Welcome back!" });

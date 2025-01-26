@@ -23,8 +23,6 @@ const Shop = () => {
     );
   }, [dispatch]);
 
-  console.log(productList, "productList");
-
   function handleAddtoCart(getCurrentProductId) {
     if (!user) {
       toast({

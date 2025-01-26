@@ -37,8 +37,6 @@ function App() {
     dispatch(checkAuth());
   }, [dispatch]);
 
-  console.log(isLoading, isAuthenticated, user);
-
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <div className="flex flex-col overflow-hidden bg-white">

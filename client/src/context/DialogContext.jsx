@@ -27,7 +27,6 @@ const ModalProvider = ({ children }) => {
   // Function to close the modal [2]
   const closeModal = () => {
     setIsOpen(false);
-    console.log(isOpen);
     setModalProps({}); // Reset modal props on close
   };
 

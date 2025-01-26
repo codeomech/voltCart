@@ -57,7 +57,6 @@ function ProductDetailPage() {
           quantity: 1,
         })
       ).then((data) => {
-        console.log(data);
         if (data?.payload?.success) {
           dispatch(fetchCartItems(user?.id));
           toast({

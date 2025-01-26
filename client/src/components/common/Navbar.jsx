@@ -53,7 +53,6 @@ function MenuItems() {
 
 function HeaderRightContent() {
   const { user } = useSelector((state) => state.auth);
-  console.log(user);
   const { cartItems } = useSelector((state) => state.shopCart);
   const [openCartSheet, setOpenCartSheet] = useState(false);
   const navigate = useNavigate();
@@ -66,10 +65,10 @@ function HeaderRightContent() {
   }
 
   useEffect(() => {
-    dispatch(fetchCartItems(user?.id));
+    if (user?.id) {
+      dispatch(fetchCartItems(user.id));
+    }
   }, [dispatch]);
-
-  console.log(cartItems, "sangam");
 
   return (
     <div className="flex lg:items-center lg:flex-row flex-col gap-4">

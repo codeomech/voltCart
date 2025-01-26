@@ -23,8 +23,6 @@ const DiscountAdminInput = () => {
     dispatch(fetchDiscount());
   }, [dispatch]);
 
-  console.log(discount);
-
   const [editingId, setEditingId] = useState(null);
   const [editMessage, setEditMessage] = useState("");
 
