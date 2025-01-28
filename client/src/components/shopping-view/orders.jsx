@@ -30,7 +30,7 @@ function ShoppingOrders() {
   }
 
   useEffect(() => {
-    dispatch(getAllOrdersByUserId(user?.id));
+    dispatch(getAllOrdersByUserId(user?.id || user?._id));
   }, [dispatch]);
 
   useEffect(() => {

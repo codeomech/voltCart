@@ -20,11 +20,11 @@ const Dashboard = () => {
     (state) => state.shopProducts
   );
 
-  console.log("Product", productList);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   //  const navigate = useNavigate();
   const { toast } = useToast();
+  const userId = user?.id || user?._id;
 
   function handleAddtoCart(getCurrentProductId) {
     if (!user) {
@@ -34,13 +34,13 @@ const Dashboard = () => {
     } else {
       dispatch(
         addToCart({
-          userId: user?.id,
+          userId: userId,
           productId: getCurrentProductId,
           quantity: 1,
         })
       ).then((data) => {
         if (data?.payload?.success) {
-          dispatch(fetchCartItems(user?.id)).then((data) => console.log(data));
+          dispatch(fetchCartItems(userId)).then((data) => console.log(data));
           toast({
             title: "Product is added to cart",
           });

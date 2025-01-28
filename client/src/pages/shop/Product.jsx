@@ -52,13 +52,13 @@ function ProductDetailPage() {
       }
       dispatch(
         addToCart({
-          userId: user?.id,
+          userId: user?.id || user?._id,
           productId: getCurrentProductId,
           quantity: 1,
         })
       ).then((data) => {
         if (data?.payload?.success) {
-          dispatch(fetchCartItems(user?.id));
+          dispatch(fetchCartItems(user?.id || user?._id));
           toast({
             title: "Product is added to cart",
           });
@@ -71,7 +71,7 @@ function ProductDetailPage() {
     dispatch(
       addReview({
         productId: id,
-        userId: user?.id,
+        userId: user?.id || user?._id,
         userName: user?.userName,
         reviewMessage: reviewMsg,
         reviewValue: rating,

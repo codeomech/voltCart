@@ -44,13 +44,13 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
     currentEditedId !== null
       ? dispatch(
           editaAddress({
-            userId: user?.id,
+            userId: user?.id || user?._id,
             addressId: currentEditedId,
             formData,
           })
         ).then((data) => {
           if (data?.payload?.success) {
-            dispatch(fetchAllAddresses(user?.id));
+            dispatch(fetchAllAddresses(user?.id || user?._id));
             setCurrentEditedId(null);
             setFormData(initialAddressFormData);
             toast({
@@ -61,11 +61,11 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
       : dispatch(
           addNewAddress({
             ...formData,
-            userId: user?.id,
+            userId: user?.id || user?._id,
           })
         ).then((data) => {
           if (data?.payload?.success) {
-            dispatch(fetchAllAddresses(user?.id));
+            dispatch(fetchAllAddresses(user?._id));
             setFormData(initialAddressFormData);
             toast({
               title: "Address added successfully",
@@ -76,10 +76,13 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
 
   function handleDeleteAddress(getCurrentAddress) {
     dispatch(
-      deleteAddress({ userId: user?.id, addressId: getCurrentAddress._id })
+      deleteAddress({
+        userId: user?.id || user?._id,
+        addressId: getCurrentAddress._id,
+      })
     ).then((data) => {
       if (data?.payload?.success) {
-        dispatch(fetchAllAddresses(user?.id));
+        dispatch(fetchAllAddresses(user?.id || user?._id));
         toast({
           title: "Address deleted successfully",
         });
@@ -106,7 +109,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
   }
 
   useEffect(() => {
-    dispatch(fetchAllAddresses(user?.id));
+    dispatch(fetchAllAddresses(user?.id || user?._id));
   }, [dispatch]);
 
   return (

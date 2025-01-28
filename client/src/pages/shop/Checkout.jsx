@@ -48,7 +48,7 @@ function ShoppingCheckout() {
     }
 
     const orderData = {
-      userId: user?.id,
+      userId: user?.id || user?._id,
       cartId: cartItems?._id,
       cartItems: cartItems.items.map((singleCartItem) => ({
         productId: singleCartItem?.productId,
@@ -106,7 +106,7 @@ function ShoppingCheckout() {
                 cartItems.items.forEach((item) => {
                   dispatch(
                     deleteCartItem({
-                      userId: user?.id,
+                      userId: user?.id || user?._id,
                       productId: item.productId, // Pass productId from the item
                     })
                   );
@@ -158,7 +158,10 @@ function ShoppingCheckout() {
         <div className="flex flex-col gap-4">
           {cartItems && cartItems.items && cartItems.items.length > 0
             ? cartItems.items.map((item) => (
-                <UserCartItemsContent cartItem={item} />
+                <UserCartItemsContent
+                  key={item?.id || item?._id}
+                  cartItem={item}
+                />
               ))
             : null}
           <div className="mt-8 space-y-4">

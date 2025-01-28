@@ -41,7 +41,7 @@ function UserCartItemsContent({ cartItem }) {
 
     dispatch(
       updateCartQuantity({
-        userId: user?.id,
+        userId: user?.id || user?._id,
         productId: getCartItem?.productId,
         quantity:
           typeOfAction === "plus"
@@ -59,7 +59,10 @@ function UserCartItemsContent({ cartItem }) {
 
   function handleCartItemDelete(getCartItem) {
     dispatch(
-      deleteCartItem({ userId: user?.id, productId: getCartItem?.productId })
+      deleteCartItem({
+        userId: user?.id || user?._id,
+        productId: getCartItem?.productId,
+      })
     ).then((data) => {
       if (data?.payload?.success) {
         toast({

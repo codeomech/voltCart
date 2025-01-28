@@ -29,11 +29,12 @@ import { Label } from "../ui/label";
 import { useModalContext } from "@/context/DialogContext";
 import { MODAL_TYPES } from "@/context/DialogContext";
 
-function MenuItems() {
+function MenuItems({ onItemClick }) {
   const navigate = useNavigate();
 
-  function handleNavigate(getCurrentMenuItem) {
-    navigate(getCurrentMenuItem.path);
+  function handleNavigate(menuItem) {
+    navigate(menuItem.path);
+    if (onItemClick) onItemClick(); // Close sheet after navigation
   }
 
   return (
@@ -65,14 +66,14 @@ function HeaderRightContent() {
   }
 
   useEffect(() => {
-    if (user?.id) {
-      dispatch(fetchCartItems(user.id));
+    if (user?.id || user?._id) {
+      dispatch(fetchCartItems(user?.id || user?._id));
     }
   }, [dispatch]);
 
   return (
-    <div className="flex lg:items-center lg:flex-row flex-col gap-4">
-      <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
+    <div className="flex flex-row items-center gap-4">
+      <Sheet open={openCartSheet} onOpenChange={setOpenCartSheet}>
         <Button
           onClick={() => setOpenCartSheet(true)}
           variant="outline"
@@ -119,7 +120,10 @@ function HeaderRightContent() {
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
-        <Button onClick={() => openModal(MODAL_TYPES.LOGIN_MODAL)}>
+        <Button
+          onClick={() => openModal(MODAL_TYPES.LOGIN_MODAL)}
+          className="hidden sm:inline-flex" // Hide login button on smallest mobile
+        >
           Login
         </Button>
       )}
@@ -129,6 +133,7 @@ function HeaderRightContent() {
 
 function ShoppingHeader() {
   const { isAuthenticated } = useSelector((state) => state.auth);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
@@ -137,24 +142,28 @@ function ShoppingHeader() {
           <img className="w-11 h-11" src={logo}></img>
           <span className="font-bold text-4xl font-great">Volt</span>
         </Link>
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="lg:hidden">
-              <Menu className="h-6 w-6" />
-              <span className="sr-only">Toggle header menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="w-full max-w-xs">
-            <MenuItems />
-            <HeaderRightContent />
-          </SheetContent>
-        </Sheet>
         <div className="hidden lg:block">
           <MenuItems />
         </div>
 
         <div className="hidden lg:block">
           <HeaderRightContent />
+        </div>
+
+        {/* Mobile Header Elements */}
+        <div className="flex items-center gap-4 lg:hidden">
+          <HeaderRightContent />
+          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="icon">
+                <Menu className="h-6 w-6" />
+                <span className="sr-only">Toggle header menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-full max-w-xs">
+              <MenuItems onItemClick={() => setIsSheetOpen(false)} />
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </header>

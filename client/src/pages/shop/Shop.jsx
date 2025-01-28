@@ -31,13 +31,13 @@ const Shop = () => {
     } else {
       dispatch(
         addToCart({
-          userId: user?.id,
+          userId: user?.id || user?._id,
           productId: getCurrentProductId,
           quantity: 1,
         })
       ).then((data) => {
         if (data?.payload?.success) {
-          dispatch(fetchCartItems(user?.id));
+          dispatch(fetchCartItems(user?.id || user?._id));
           toast({
             title: "Product is added to cart",
           });
@@ -61,6 +61,7 @@ const Shop = () => {
             {productList && productList.length > 0
               ? productList.map((productItem) => (
                   <ShoppingProductTile
+                    key={producItem?.id || productItem?._id}
                     product={productItem}
                     handleAddtoCart={handleAddtoCart}
                   />
