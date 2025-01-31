@@ -61,7 +61,7 @@ const Shop = () => {
             {productList && productList.length > 0
               ? productList.map((productItem) => (
                   <ShoppingProductTile
-                    key={producItem?.id || productItem?._id}
+                    key={productItem?.id || productItem?._id}
                     product={productItem}
                     handleAddtoCart={handleAddtoCart}
                   />

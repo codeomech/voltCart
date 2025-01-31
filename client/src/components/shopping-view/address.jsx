@@ -37,41 +37,34 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
         title: "You can add max 3 addresses",
         variant: "destructive",
       });
-
       return;
     }
 
-    currentEditedId !== null
-      ? dispatch(
-          editaAddress({
+    const action =
+      currentEditedId !== null
+        ? editaAddress({
             userId: user?.id || user?._id,
             addressId: currentEditedId,
             formData,
           })
-        ).then((data) => {
-          if (data?.payload?.success) {
-            dispatch(fetchAllAddresses(user?.id || user?._id));
-            setCurrentEditedId(null);
-            setFormData(initialAddressFormData);
-            toast({
-              title: "Address updated successfully",
-            });
-          }
-        })
-      : dispatch(
-          addNewAddress({
+        : addNewAddress({
             ...formData,
             userId: user?.id || user?._id,
-          })
-        ).then((data) => {
-          if (data?.payload?.success) {
-            dispatch(fetchAllAddresses(user?._id));
-            setFormData(initialAddressFormData);
-            toast({
-              title: "Address added successfully",
-            });
-          }
+          });
+
+    dispatch(action).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchAllAddresses(user?.id || user?._id)); // ✅ Fetch latest addresses
+        setCurrentEditedId(null);
+        setFormData(initialAddressFormData);
+        toast({
+          title:
+            currentEditedId !== null
+              ? "Address updated successfully"
+              : "Address added successfully",
         });
+      }
+    });
   }
 
   function handleDeleteAddress(getCurrentAddress) {
@@ -110,7 +103,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
 
   useEffect(() => {
     dispatch(fetchAllAddresses(user?.id || user?._id));
-  }, [dispatch]);
+  }, [dispatch, addressList]);
 
   return (
     <Card>

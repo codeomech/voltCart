@@ -2,10 +2,11 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
 import UserCartItemsContent from "./cart-items-content";
-import { Key } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 function UserCartWrapper({ cartItems, setOpenCartSheet }) {
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const totalCartAmount =
     cartItems && cartItems.length > 0
@@ -19,6 +20,19 @@ function UserCartWrapper({ cartItems, setOpenCartSheet }) {
           0
         )
       : 0;
+
+  const handleCheckout = () => {
+    if (!cartItems || cartItems.length === 0) {
+      toast({
+        title: "Your cart is empty. Please add items to proceed.",
+        variant: "destructive",
+      });
+      setOpenCartSheet(false);
+      return;
+    }
+    navigate("/checkout");
+    setOpenCartSheet(false);
+  };
 
   return (
     <SheetContent className="sm:max-w-md">
@@ -41,13 +55,7 @@ function UserCartWrapper({ cartItems, setOpenCartSheet }) {
           <span className="font-bold">₹{totalCartAmount}</span>
         </div>
       </div>
-      <Button
-        onClick={() => {
-          navigate("/checkout");
-          setOpenCartSheet(false);
-        }}
-        className="w-full mt-6"
-      >
+      <Button onClick={handleCheckout} className="w-full mt-6">
         Checkout
       </Button>
     </SheetContent>
