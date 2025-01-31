@@ -176,7 +176,7 @@ const loginUser = async (req, res) => {
         httpOnly: true, // Prevents XSS attacks
         secure: true, // Required for HTTPS
         sameSite: "None", // Allows cross-origin requests
-        domain: ".voltcart.in", // Ensures the cookie is accessible on the frontend
+        domain: "www.voltcart.in", // Ensures the cookie is accessible on the frontend
         path: "/", // Makes the cookie accessible everywhere
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days expiration
       })
@@ -253,7 +253,7 @@ const googleLogin = async (req, res) => {
         httpOnly: true, // Prevents XSS attacks
         secure: true, // Required for HTTPS
         sameSite: "None", // Allows cross-origin requests
-        domain: ".voltcart.in", // Ensures the cookie is accessible on the frontend
+        domain: "www.voltcart.in", // Ensures the cookie is accessible on the frontend
         path: "/", // Makes the cookie accessible everywhere
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days expiration
       })
