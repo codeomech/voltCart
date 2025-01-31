@@ -102,8 +102,10 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
   }
 
   useEffect(() => {
-    dispatch(fetchAllAddresses(user?.id || user?._id));
-  }, [dispatch, addressList]);
+    if (user?.id || user?._id) {
+      dispatch(fetchAllAddresses(user?.id || user?._id));
+    }
+  }, [dispatch, user]);
 
   return (
     <Card>

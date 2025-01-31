@@ -171,16 +171,25 @@ const loginUser = async (req, res) => {
       { expiresIn: "60m" }
     );
 
-    res.cookie("token", token, { httpOnly: true, secure: false }).json({
-      success: true,
-      message: "Logged in successfully",
-      user: {
-        email: checkUser.email,
-        role: checkUser.role,
-        id: checkUser._id,
-        userName: checkUser.userName,
-      },
-    });
+    res
+      .cookie("token", token, {
+        httpOnly: true, // Prevents XSS attacks
+        secure: true, // Required for HTTPS
+        sameSite: "None", // Allows cross-origin requests
+        domain: ".voltcart.in", // Ensures the cookie is accessible on the frontend
+        path: "/", // Makes the cookie accessible everywhere
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days expiration
+      })
+      .json({
+        success: true,
+        message: "Logged in successfully",
+        user: {
+          email: checkUser.email,
+          role: checkUser.role,
+          id: checkUser._id,
+          userName: checkUser.userName,
+        },
+      });
   } catch (e) {
     console.log(e);
     res.status(500).json({
@@ -239,17 +248,26 @@ const googleLogin = async (req, res) => {
     );
 
     // Set token in cookie and respond
-    res.cookie("token", token, { httpOnly: true, secure: false }).json({
-      success: true,
-      message: "Logged in successfully with Google",
-      user: {
-        email: user.email,
-        role: user.role,
-        id: user._id,
-        userName: user.userName,
-        image: user.image,
-      },
-    });
+    res
+      .cookie("token", token, {
+        httpOnly: true, // Prevents XSS attacks
+        secure: true, // Required for HTTPS
+        sameSite: "None", // Allows cross-origin requests
+        domain: ".voltcart.in", // Ensures the cookie is accessible on the frontend
+        path: "/", // Makes the cookie accessible everywhere
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days expiration
+      })
+      .json({
+        success: true,
+        message: "Logged in successfully with Google",
+        user: {
+          email: user.email,
+          role: user.role,
+          id: user._id,
+          userName: user.userName,
+          image: user.image,
+        },
+      });
   } catch (error) {
     console.error("Error during Google login:", error);
     res.status(500).json({
