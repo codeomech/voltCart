@@ -97,11 +97,17 @@ const verifyOTP = async (req, res) => {
       delete userData.password;
 
       // Set token in cookie and respond
-      res.cookie("token", token, { httpOnly: true, secure: false }).json({
-        success: true,
-        message: "Email verified successfully and logged in!",
-        user: userData,
-      });
+      res
+        .cookie("token", token, {
+          httpOnly: true,
+          secure: true,
+          SameSite: "None",
+        })
+        .json({
+          success: true,
+          message: "Email verified successfully and logged in!",
+          user: userData,
+        });
     } else {
       return res.status(400).json({
         success: false,
