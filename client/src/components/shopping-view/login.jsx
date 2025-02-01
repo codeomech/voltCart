@@ -14,18 +14,32 @@ import { useDispatch } from "react-redux";
 import { useGoogleLogin } from "@react-oauth/google";
 import { MODAL_TYPES } from "@/context/DialogContext";
 import { loginUser, googleLoginUser } from "@/store/auth-slice";
+import { Eye, EyeOff } from "lucide-react"; // For the eye icon
 import googleIcon from "../../assets/google_icon.svg";
 
 const LoginDialog = ({ openModal, closeModal }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { toast } = useToast();
 
+  const validateEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateEmail(email)) {
+      setEmailError("Please enter a valid email address");
+      return;
+    }
+    setEmailError("");
     const loginData = { email, password };
     dispatch(loginUser(loginData))
       .unwrap()
@@ -85,29 +99,51 @@ const LoginDialog = ({ openModal, closeModal }) => {
           <Input
             id="email"
             type="email"
-            placeholder="m@example.com"
+            placeholder="madhav@example.com"
             required
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (emailError) setEmailError("");
+            }}
+            onBlur={() => {
+              if (!validateEmail(email)) {
+                setEmailError("Please enter a valid email address");
+              }
+            }}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+          {emailError && <p className="text-sm text-red-500">{emailError}</p>}
         </div>
         {/* Password Input */}
-        <div className="space-y-1">
+        <div className="space-y-1 relative">
           <Label
             htmlFor="password"
             className="text-sm font-medium text-gray-700"
           >
             Password
           </Label>
-          <Input
-            id="password"
-            type="password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <div className="relative">
+            <Input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            >
+              {showPassword ? (
+                <EyeOff className="h-5 w-5" />
+              ) : (
+                <Eye className="h-5 w-5" />
+              )}
+            </button>
+          </div>
         </div>
         {/* Error Message */}
         {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>}

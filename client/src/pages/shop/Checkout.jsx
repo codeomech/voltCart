@@ -159,7 +159,7 @@ function ShoppingCheckout() {
           {cartItems && cartItems.items && cartItems.items.length > 0
             ? cartItems.items.map((item) => (
                 <UserCartItemsContent
-                  key={item?.id || item?._id}
+                  key={item?.productId || item?._productId}
                   cartItem={item}
                 />
               ))

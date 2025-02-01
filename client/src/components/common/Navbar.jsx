@@ -1,11 +1,4 @@
-import {
-  HousePlug,
-  LogOut,
-  Menu,
-  ShoppingCart,
-  UserCog,
-  User,
-} from "lucide-react";
+import { LogOut, Menu, ShoppingCart, UserCog, User } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/feather.png";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
@@ -69,7 +62,7 @@ function HeaderRightContent() {
     if (user?.id || user?._id) {
       dispatch(fetchCartItems(user?.id || user?._id));
     }
-  }, [dispatch]);
+  }, [dispatch, user]);
 
   return (
     <div className="flex flex-row items-center gap-4">
@@ -120,12 +113,26 @@ function HeaderRightContent() {
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
-        <Button
-          onClick={() => openModal(MODAL_TYPES.LOGIN_MODAL)}
-          className="hidden sm:inline-flex" // Hide login button on smallest mobile
-        >
-          Login
-        </Button>
+        <>
+          {/* Desktop Login Button */}
+          <Button
+            onClick={() => openModal(MODAL_TYPES.LOGIN_MODAL)}
+            className="hidden lg:inline-flex"
+          >
+            Login
+          </Button>
+
+          {/* Mobile/Tablet Login Icon */}
+          <Button
+            onClick={() => openModal(MODAL_TYPES.LOGIN_MODAL)}
+            variant="outline"
+            size="icon"
+            className="lg:hidden"
+          >
+            <User className="w-6 h-6" />
+            <span className="sr-only">Login</span>
+          </Button>
+        </>
       )}
     </div>
   );

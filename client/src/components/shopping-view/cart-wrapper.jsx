@@ -33,7 +33,6 @@ function UserCartWrapper({ cartItems, setOpenCartSheet }) {
     navigate("/checkout");
     setOpenCartSheet(false);
   };
-
   return (
     <SheetContent className="sm:max-w-md">
       <SheetHeader>
@@ -43,7 +42,7 @@ function UserCartWrapper({ cartItems, setOpenCartSheet }) {
         {cartItems?.length > 0
           ? cartItems.map((item) => (
               <UserCartItemsContent
-                key={item.id || item._id} // Handle both `id` and `_id`
+                key={item.productId || item._productId} // Handle both `id` and `_id`
                 cartItem={item}
               />
             ))

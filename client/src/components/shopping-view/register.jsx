@@ -21,6 +21,7 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { googleLoginUser } from "@/store/auth-slice";
 import { registerUser, verifyOtp } from "@/store/auth-slice";
 import { MODAL_TYPES } from "@/context/DialogContext";
+import { Eye, EyeOff } from "lucide-react"; // For the eye icon
 import googleIcon from "../../assets/google_icon.svg";
 
 const RegisterDialog = ({ openModal, closeModal }) => {
@@ -30,13 +31,26 @@ const RegisterDialog = ({ openModal, closeModal }) => {
   const [message, setMessage] = useState("");
   const [otp, setOtp] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
   const navigate = useNavigate();
   const { toast } = useToast();
   const REGEXP_ONLY_DIGITS_AND_CHARS = /^[0-9]+$/;
   const dispatch = useDispatch();
 
+  const validateEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateEmail(email)) {
+      setEmailError("Please enter a valid email address");
+      return;
+    }
+    setEmailError("");
     const formData = {
       userName,
       email,
@@ -139,6 +153,7 @@ const RegisterDialog = ({ openModal, closeModal }) => {
               <Input
                 type="text"
                 id="userName"
+                placeholder="madhav"
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
                 required
@@ -147,22 +162,49 @@ const RegisterDialog = ({ openModal, closeModal }) => {
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
-                type="email"
                 id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                placeholder="madhav@example.com"
                 required
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (emailError) setEmailError("");
+                }}
+                onBlur={() => {
+                  if (!validateEmail(email)) {
+                    setEmailError("Please enter a valid email address");
+                  }
+                }}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+              {emailError && (
+                <p className="text-sm text-red-500">{emailError}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Password</Label>
-              <Input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
             </div>
             {message && <p className="text-red-500">{message}</p>}
             <DialogFooter className="py-5 flex justify-center align-middle gap-4">

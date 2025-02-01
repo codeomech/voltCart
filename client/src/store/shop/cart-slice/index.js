@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { logoutUser } from "../../auth-slice";
 
 const initialState = {
   cartItems: [],
@@ -109,6 +110,9 @@ const shoppingCartSlice = createSlice({
       .addCase(deleteCartItem.rejected, (state) => {
         state.isLoading = false;
         state.cartItems = [];
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        return initialState;
       });
   },
 });
