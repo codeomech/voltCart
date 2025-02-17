@@ -23,6 +23,7 @@ function ShoppingProductTile({ product, handleAddtoCart }) {
             <img
               src={product?.image}
               alt={product?.title}
+              loading="lazy"
               className="w-full h-full object-contain rounded-t-md"
             />
           </div>
@@ -46,10 +47,10 @@ function ShoppingProductTile({ product, handleAddtoCart }) {
             {product?.title}
           </h2>
           <div className="flex items-center gap-2 mt-1 sm:mt-2">
-            <span className="text-xs sm:text-sm text-gray-500">
+            <span className="bg-gray-100 text-blue-900 text-xs font-medium px-2.5 py-0.5 rounded">
               {categoryOptionsMap[product?.category]}
             </span>
-            <span className="text-xs sm:text-sm text-green-600">
+            <span className="bg-gray-100 text-blue-900 text-xs font-medium px-2.5 py-0.5 rounded">
               {brandOptionsMap[product?.brand]}
             </span>
           </div>
@@ -81,7 +82,7 @@ function ShoppingProductTile({ product, handleAddtoCart }) {
             ) : (
               <Button
                 onClick={() => handleAddtoCart(product?._id)}
-                className="text-black border-black  bg-gray-100 text-xs sm:text-sm px-4 py-2  border-2 font-semibold hover:bg-green-50  hover:border-green-600 hover:text-green-500"
+                className="text-black border-black  bg-gray-100 text-xs sm:text-sm px-4 py-2  border-2 font-semibold hover:bg-blue-100  hover:border-blue-900 hover:text-blue-900"
               >
                 ADD
               </Button>

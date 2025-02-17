@@ -20,7 +20,12 @@ function ProductDetailPage() {
   const { cartItems } = useSelector((state) => state.shopCart);
   const { toast } = useToast();
   const [reviewMsg, setReviewMsg] = useState("");
+  const [isHovered, setIsHovered] = useState(false);
+  const [backgroundPosition, setBackgroundPosition] = useState("0% 0%");
   const [rating, setRating] = useState(0);
+  const descriptionLines = productDetails?.description
+    .split("\n")
+    .filter((line) => line.trim() !== "");
 
   useEffect(() => {
     dispatch(fetchProductDetails(id)); // Fetch product details by ID
@@ -88,6 +93,13 @@ function ProductDetailPage() {
     });
   }
 
+  const handleMouseMove = (e) => {
+    const { left, top, width, height } = e.target.getBoundingClientRect();
+    const x = ((e.pageX - left) / width) * 100;
+    const y = ((e.pageY - top) / height) * 100;
+    setBackgroundPosition(`${x}% ${y}%`);
+  };
+
   const averageReview =
     reviews && reviews.length > 0
       ? reviews.reduce((sum, reviewItem) => sum + reviewItem.reviewValue, 0) /
@@ -98,18 +110,42 @@ function ProductDetailPage() {
     <div className="container mx-auto p-4">
       <div className="grid md:grid-cols-2 gap-8">
         {/* Image Section */}
-        <div className="relative flex justify-center items-center h-[300px] w-full lg:h-[500px] lg:w-[500px] mx-auto p-8 border border-solid">
-          <img
-            src={productDetails?.image}
-            alt={productDetails?.title}
-            className="h-full object-contain"
-          />
+        <div
+          className="relative flex justify-center items-center h-[300px] w-full lg:h-[500px] lg:w-[500px] mx-auto p-8 border border-solid overflow-hidden"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          onMouseMove={handleMouseMove}
+          style={{
+            backgroundImage: isHovered
+              ? `url(${productDetails?.image})`
+              : "none",
+            backgroundSize: isHovered ? "200%" : "contain",
+            backgroundPosition: backgroundPosition,
+            backgroundRepeat: "no-repeat",
+            transition: "background-size 0.3s ease-in-out",
+            cursor: isHovered ? "zoom-in" : "default",
+          }}
+        >
+          {/* Initial Image (Always Visible) */}
+          {!isHovered && (
+            <img
+              src={productDetails?.image}
+              alt={productDetails?.title}
+              className="h-full object-contain"
+            />
+          )}
         </div>
         {/* Product Details Section */}
         <div>
           <h1 className="text-3xl font-bold mb-4">{productDetails?.title}</h1>
-          <p className="text-gray-600 mb-6">{productDetails?.description}</p>
-          <div className="flex items-center justify-between mb-6">
+          {/* Render description as a list */}
+          <h3 className="text-xl font-bold mb-2 ml-2">Product Details</h3>
+          <ul className="list-disc list-inside text-gray-600 mb-6 ml-2">
+            {descriptionLines?.map((line, index) => (
+              <li key={index}>{line}</li>
+            ))}
+          </ul>
+          <div className="flex items-center gap-4 mb-6">
             <span className="text-3xl font-bold text-primary">
               ₹{productDetails?.salePrice}
             </span>

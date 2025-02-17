@@ -58,11 +58,9 @@ export const addProductFormElements = [
     name: "category",
     componentType: "select",
     options: [
-      { id: "men", label: "Men" },
-      { id: "women", label: "Women" },
-      { id: "kids", label: "Kids" },
-      { id: "accessories", label: "Accessories" },
-      { id: "footwear", label: "Footwear" },
+      { id: "men", label: "12 Pcs" },
+      { id: "women", label: "1 Pc" },
+      { id: "kids", label: "3 Pcs" },
     ],
   },
   {
@@ -116,16 +114,14 @@ export const shoppingViewHeaderMenuItems = [
 ];
 
 export const categoryOptionsMap = {
-  men: "Men",
-  women: "Women",
-  kids: "Kids",
-  accessories: "Accessories",
-  footwear: "Footwear",
+  men: "12 Pcs",
+  women: "1 Pc",
+  kids: "3 Pcs",
 };
 
 export const brandOptionsMap = {
-  volt: "volt",
-  bodycare: "Bodycare",
+  volt: "Cotton",
+  bodycare: "Mixed",
 };
 
 export const filterOptions = {
