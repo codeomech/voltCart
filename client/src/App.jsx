@@ -26,6 +26,7 @@ import ShoppingCheckout from "./pages/shop/Checkout";
 import ProductDetailPage from "./pages/shop/Product";
 import PaymentSuccessPage from "./pages/shop/Payment";
 import ModalProvider from "./context/DialogContext";
+import { Analytics } from "@vercel/analytics/react";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -39,6 +40,7 @@ function App() {
 
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <Analytics />
       <div className="flex flex-col overflow-hidden bg-white">
         <Preloader />
         <ModalProvider>
